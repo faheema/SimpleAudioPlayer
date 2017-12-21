@@ -14,6 +14,7 @@ package sap.com.fahm.simpleaudioplayer.player;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
@@ -36,7 +37,7 @@ public class AudioPlayerManager implements IAudioPlayer {
     private final Context mContext;
     private MediaPlayer mMediaPlayer;
     private int mResourceId;
-   private AudioPlayerCallBack mAudioPlaybackListner;
+    private AudioPlayerCallBack mAudioPlaybackListner;
     private ScheduledExecutorService mExecutor;
     private Runnable mSeekbarPositionUpdateTask;
 
@@ -131,6 +132,7 @@ public class AudioPlayerManager implements IAudioPlayer {
             startUpdatingCallbackWithPosition();
         }
     }
+
     @Override
     public void stop() {
         if (mMediaPlayer != null) {

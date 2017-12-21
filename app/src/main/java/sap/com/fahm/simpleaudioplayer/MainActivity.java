@@ -29,7 +29,7 @@ import sap.com.fahm.simpleaudioplayer.player.AudioPlayerCallBack;
 import sap.com.fahm.simpleaudioplayer.player.AudioPlayerManager;
 import sap.com.fahm.simpleaudioplayer.player.IAudioPlayer;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AudioPlayerCallBack{
 
     public static final String TAG = "MainActivity";
     public static final int MEDIA_RES_ID = R.raw.fahm_app_raw;
@@ -104,51 +104,7 @@ public class MainActivity extends AppCompatActivity {
     private void initializePlaybackController() {
         AudioPlayerManager mAudioPlayerManager = new AudioPlayerManager(this);
         LogHelper.Log("initializePlaybackController: created MediaPlayerHolder");
-        mAudioPlayerManager.setPlaybackInfoListener(new AudioPlayerCallBack() {
-            @Override
-            public void onLogUpdated(String message) {
-                if (mTextDebug != null) {
-                    mTextDebug.append(message);
-                    mTextDebug.append("\n");
-                    // Moves the scrollContainer focus to the end.
-                    mScrollContainer.post(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    mScrollContainer.fullScroll(ScrollView.FOCUS_DOWN);
-                                }
-                            });
-                }
-                LogHelper.Log("" + message);
-            }
-
-            @Override
-            public void onDurationChanged(int duration) {
-                mSeekbarAudio.setMax(duration);
-                LogHelper.Log(String.format("setPlaybackDuration: setMax(%d)", duration));
-            }
-
-            @Override
-            public void onPositionChanged(int position) {
-                if (!mUserIsSeeking) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        mSeekbarAudio.setProgress(position, true);
-                    }
-                    LogHelper.Log(String.format("setPlaybackPosition: setProgress(%d)", position));
-                }
-            }
-
-            @Override
-            public void onStateChanged(int state) {
-                String stateToString = LogHelper.convertStateToString(state);
-                onLogUpdated(String.format("onStateChanged(%s)", stateToString));
-            }
-
-            @Override
-            public void onPlaybackCompleted() {
-
-            }
-        });
+        mAudioPlayerManager.setPlaybackInfoListener(this);
         mIAudioPlayer = mAudioPlayerManager;
         LogHelper.Log("initializePlaybackController: MediaPlayerHolder progress callback set");
     }
@@ -178,5 +134,47 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onLogUpdated(String message) {
+        if (mTextDebug != null) {
+            mTextDebug.append(message);
+            mTextDebug.append("\n");
+            // Moves the scrollContainer focus to the end.
+            mScrollContainer.post(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            mScrollContainer.fullScroll(ScrollView.FOCUS_DOWN);
+                        }
+                    });
+        }
+        LogHelper.Log("" + message);
+    }
 
+    @Override
+    public void onDurationChanged(int duration) {
+        mSeekbarAudio.setMax(duration);
+        LogHelper.Log(String.format("setPlaybackDuration: setMax(%d)", duration));
+    }
+
+    @Override
+    public void onPositionChanged(int position) {
+        if (!mUserIsSeeking) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mSeekbarAudio.setProgress(position, true);
+            }
+            LogHelper.Log(String.format("setPlaybackPosition: setProgress(%d)", position));
+        }
+    }
+
+    @Override
+    public void onStateChanged(int state) {
+        String stateToString = LogHelper.convertStateToString(state);
+        onLogUpdated(String.format("onStateChanged(%s)", stateToString));
+    }
+
+    @Override
+    public void onPlaybackCompleted() {
+
+    }
 }
