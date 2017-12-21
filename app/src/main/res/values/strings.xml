@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SimpleAudioPlayer</string>
+    <string name="audio_play">Play</string>
+    <string name="audio_pause">Pause</string>
+    <string name="audio_stop">Stop</string>
+    <string name="audio_forward">Forward</string>
+    <string name="audio_rewind">Rewind</string>
+</resources>
